@@ -23,6 +23,7 @@ import { useDelegatedReactRouterLinks } from "~/ui/delegate-links";
 import type { loader as docsLayoutLoader } from "~/routes/docs.$lang.$ref";
 import type { loader as rootLoader } from "~/root";
 import { getMeta } from "~/lib/meta";
+import { useState } from "react";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   let url = new URL(request.url);
@@ -126,6 +127,8 @@ export const meta: MetaFunction<Loader, MatchLoaders> = (args) => {
 };
 
 export default function DocPage() {
+  const [count, setCount] = useState(0);
+
   let { doc } = useLoaderData<typeof loader>();
   let ref = React.useRef<HTMLDivElement>(null);
   useDelegatedReactRouterLinks(ref);
@@ -144,6 +147,12 @@ export default function DocPage() {
       ) : (
         <div className="hidden xl:order-1 xl:block xl:w-56 xl:flex-shrink-0" />
       )}
+      <div>
+        The count is {count}, the date is {new Date().getTime()}
+      </div>
+      <div>
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+      </div>
       <div className="min-w-0 pt-12 xl:flex-grow xl:pt-20">
         <div ref={ref} className="markdown w-full max-w-3xl pb-[33vh]">
           <div
